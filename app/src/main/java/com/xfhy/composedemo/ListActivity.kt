@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,11 +33,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.xfhy.composedemo.ui.theme.ComposeDemoTheme
+import com.xfhy.composedemo.viewmodel.DynamicListViewModel
+import androidx.compose.runtime.livedata.observeAsState
 
 /**
- * 展示一个列表,类似于RecycleView
+ * 1. 展示一个列表,类似于RecycleView,动态添加元素并刷新,item 间隔
+ * 2. 配合ViewModel和LiveData
  */
 class ListActivity : ComponentActivity() {
+
+    private val viewmodel: DynamicListViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -44,14 +51,17 @@ class ListActivity : ComponentActivity() {
             ComposeDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                        DynamicListScreen()
+//                        DynamicListScreen()
+                        DynamicListScreenAddViewModel(viewmodel)
                     }
                 }
             }
         }
     }
+
 }
 
+// 没用LiveData和ViewModel
 @Composable
 fun DynamicListScreen() {
     // 状态变量，用于存储列表数据
@@ -88,6 +98,47 @@ fun DynamicListScreen() {
                     .background(Color.Blue)
                     // 宽  占满
                     .fillMaxWidth()
+            )
+        }
+    }
+}
+
+// 用上LiveData和ViewModel
+@Composable
+fun DynamicListScreenAddViewModel(viewModel: DynamicListViewModel) {
+    // 状态变量，用于存储列表数据
+    val items by viewModel.items.observeAsState(emptyList())
+    // 按钮点击时添加新项目到列表
+    val addButton = @Composable {
+        Button(onClick = { viewModel.addItem("Item ${items.size + 1}") }) {
+            Text(text = "点我添加item")
+        }
+    }
+    // LazyColumn用于展示列表  类似RecycleView
+    LazyColumn {
+        item { addButton() }
+        itemsIndexed(items) { index, item ->
+            // 分割线
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(Color.White)
+            )
+            // item
+            Text(
+                text = item,
+                fontSize = 16.sp,
+                color = Color.Red,
+                maxLines = 1,
+                // 展示不完时,在末尾添加省略号
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .background(Color.Blue)
+                    // 宽  占满
+                    .fillMaxWidth()
+                    .padding(start = 3.dp, end = 6.dp)
             )
         }
     }
