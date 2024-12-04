@@ -13,9 +13,10 @@
         android:theme="@style/Theme.ComposeDemo"
         tools:targetApi="31">
         <activity
-            android:name=".OldActivity"
+            android:name=".ListActivity"
             android:exported="true"
-            android:theme="@style/Theme.DemoAppCompat">
+            android:label="@string/title_activity_list"
+            android:theme="@style/Theme.ComposeDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,12 +24,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".OldActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DemoAppCompat">
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ComposeDemo">
-
-        </activity>
+            android:theme="@style/Theme.ComposeDemo"></activity>
     </application>
 
 </manifest>
