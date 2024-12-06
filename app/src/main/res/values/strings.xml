@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ComposeDemo</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_view_in_compose">ViewInComposeActivity</string>
 </resources>

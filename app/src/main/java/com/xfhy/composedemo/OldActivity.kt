@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.xfhy.composedemo.ui.theme.ComposeDemoTheme
 
 /**
- * 在已有布局中加入Compose View
+ * 1. 在已有布局中加入Compose View
  */
 class OldActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
